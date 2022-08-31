@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Default variable initialization
+# Default variable initialization; Change if other club only on your local copy or a fork
 arg=$1
 club_name="MHS Solar Racing"
 club_name_var_friendly="solar_car"
@@ -35,7 +35,19 @@ case $arg in
     ;;
   "-s")
     # Installs, with noconfirm so user doesn't have to hit "Y" or ENTER to install
-    sudo pacman -S npm --noconfirm
+    if grep -q -i "arch" /etc/issue || grep -q -i "manjaro" /etc/issue
+    then
+      sudo pacman -S npm --noconfirm
+    elif grep -q -i "ubuntu" /etc/issue || grep -q -i "debain" /etc/issue
+    then
+      sudo apt-get -y install npm  
+    elif grep -q -i "fedora" /etc/issue
+    then
+      sudo dnf install npm
+    else
+      echo "IDK. Get a different distro"
+      exit 1
+    fi
     sudo npm i -g md-to-pdf
     ;;
   "-o")
@@ -44,12 +56,15 @@ case $arg in
     vice_president="$3"
     ;;
   "-t")
+    # Change teacher sponsor
     sponsor="$2"
     ;;
   "-m")
+    # Change meeting type 
     meeting_type="$2"
     ;;
   "-b")
+    # Set purchace var to true so that section functions
     purchace=true
     purchace_item=$2
     ;;
@@ -94,6 +109,7 @@ for (( i=0; i<$default_length; i++ )); do
   echo "</br></br>" >> "$file_name"
 done
 
+# Add purchace section to bottom of pdf
 if $purchace; then
   echo "</br></br></br>" >> "$file_name"
   echo "## PURCHACE REQUEST FOR $purchace_item" >> "$file_name"
