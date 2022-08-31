@@ -11,7 +11,8 @@ meeting_date="$(date +'%m-%d-%Y')"
 file_name="$club_name_var_friendly.$meeting_date.md"
 altering_time="$(date +'%I:%M %p')"
 meeting_type="Build Meeting"
-default_sections=("HEAD TO SHOP" "END MEETING")
+default_sections=("START MEETING" "HEAD TO SHOP" "END MEETING")
+# default_descriptions array is down below args. If you update default_sections, you need to update default_descriptions for it to remain in sync
 default_length=${#default_sections[@]}
 
 # Argument handler
@@ -52,7 +53,7 @@ case $arg in
 esac
 
 # default_descriptions array added here since some of of the variable it refernces change depending on any args
-default_descriptions=("$president and $vice_president lead $club_name to metal shop to work on car" "$president and $vice_president adjourn $meeting_type on $meeting_date")
+default_descriptions=("$president and $vice_president call $club_name $meeting_type to order in $sponsor's room" "$president and $vice_president lead $club_name to metal shop to work on car" "$president and $vice_president adjourn $meeting_type on $meeting_date")
 
 # Main code start
 
