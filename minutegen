@@ -1,0 +1,90 @@
+#!/bin/bash
+
+# Default variable initialization
+arg=$1
+club_name="MHS Solar Racing"
+club_name_var_friendly="solar_car"
+sponsor="Brandon Searcey"
+president="Ben Stidham"
+vice_president="Hudson Nguyen"
+meeting_date="$(date +'%m-%d-%Y')"
+file_name="$club_name_var_friendly.$meeting_date.md"
+altering_time="$(date +'%I:%M %p')"
+meeting_type="Build Meeting"
+default_sections=("HEAD TO SHOP" "END MEETING")
+default_length=${#default_sections[@]}
+
+# Argument handler
+case $arg in
+  "")
+    # Do nothing if no args
+    ;;
+  "-h")
+    # Prints out help message
+    echo "Meeting Minute generator for solar car. Usage: ./minutegen [args]"
+    echo "-h                     Prints this help message"
+    echo "-s                     Set up system for minutegen"
+    echo "-o [prez] [vp]         Replace president and vp officer names for this meeting"
+    echo "-t [sponsor]           Replace teacher sponsor for this meeting"
+    echo "-m [type]              Change meeting type for this meeting"
+    ;;
+  "-s")
+    # Installs, with noconfirm so user doesn't have to hit "Y" or ENTER to install
+    sudo pacman -S npm --noconfirm
+    sudo npm i -g md-to-pdf
+    ;;
+  "-o")
+    # Set new variables for in case someone's out i guess idk
+    president="$2"
+    vice_president="$3"
+    ;;
+  "-t")
+    sponsor="$2"
+    ;;
+  "-m")
+    meeting_type="$2"
+    ;;
+  *)
+    # Handle any other non-existent args
+    echo "Please input valid arguments. run './minutegen -h' to see list of commands & syntax"
+    exit 1
+    ;;
+esac
+
+# default_descriptions array added here since some of of the variable it refernces change depending on any args
+default_descriptions=("$president and $vice_president lead $club_name to metal shop to work on car" "$president and $vice_president adjourn $meeting_type on $meeting_date")
+
+# Main code start
+
+# Create file
+touch "$file_name"
+
+# Enter basic meeting data into file
+echo "# $club_name Meeting  " > "$file_name"
+echo "_______" >> "$file_name"
+echo "<b>President: </b>$president  " >> "$file_name"
+echo "<b>Vice President: </b>$vice_president  " >> "$file_name"
+echo "<b>Club Sponsor: </b>$sponsor  " >> "$file_name"
+
+# Spacers before body content
+echo "</br></br></br></br></br>" >> "$file_name"
+
+# Parse through default sections to build md file
+for (( i=0; i<$default_length; i++ )); do
+
+  # Prompt and wait for enter key to continue
+  read -p "Press enter key when ${default_sections[$i]} starts"
+
+  # Take current time
+  altering_time="$(date +'%I:%M %p')"
+  echo "<b>${default_sections[$i]}: </b>$altering_time  " >> "$file_name"
+  echo "_______" >> "$file_name"
+  echo "${default_descriptions[$i]}" >> "$file_name"
+  echo "</br></br></br>" >> "$file_name"
+done
+
+# Convert .md file to .pdf
+md-to-pdf "./$file_name"
+
+# Clean up after finished
+rm -f "$file_name"
