@@ -53,7 +53,7 @@ case $arg in
 esac
 
 # default_descriptions array added here since some of of the variable it refernces change depending on any args
-default_descriptions=("$president and $vice_president call $club_name $meeting_type to order in $sponsor's room" "$president and $vice_president lead $club_name to metal shop to work on car" "$president and $vice_president adjourn $meeting_type on $meeting_date")
+default_descriptions=("President $president and Vice President $vice_president call $club_name $meeting_type to order in $sponsor's room" "$president and $vice_president lead $club_name to metal shop to work on car" "$president and $vice_president adjourn $meeting_type on $meeting_date")
 
 # Main code start
 
@@ -61,14 +61,14 @@ default_descriptions=("$president and $vice_president call $club_name $meeting_t
 touch "$file_name"
 
 # Enter basic meeting data into file
-echo "# $club_name Meeting  " > "$file_name"
+echo "# $club_name Meeting on $meeting_date  " > "$file_name"
 echo "_______" >> "$file_name"
 echo "<b>President: </b>$president  " >> "$file_name"
 echo "<b>Vice President: </b>$vice_president  " >> "$file_name"
 echo "<b>Club Sponsor: </b>$sponsor  " >> "$file_name"
 
 # Spacers before body content
-echo "</br></br></br></br></br>" >> "$file_name"
+echo "</br></br></br>" >> "$file_name"
 
 # Parse through default sections to build md file
 for (( i=0; i<$default_length; i++ )); do
@@ -78,10 +78,10 @@ for (( i=0; i<$default_length; i++ )); do
 
   # Take current time
   altering_time="$(date +'%I:%M %p')"
-  echo "<b>${default_sections[$i]}: </b>$altering_time  " >> "$file_name"
+  echo "## ${default_sections[$i]}: $altering_time  " >> "$file_name"
   echo "_______" >> "$file_name"
   echo "${default_descriptions[$i]}" >> "$file_name"
-  echo "</br></br></br>" >> "$file_name"
+  echo "</br></br>" >> "$file_name"
 done
 
 # Convert .md file to .pdf
