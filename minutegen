@@ -35,15 +35,19 @@ case $arg in
     ;;
   "-s")
     # Installs, with noconfirm so user doesn't have to hit "Y" or ENTER to install
+    # Grep's to check which distro's being used so that we can let a few more work and use it
     if grep -q -i "arch" /etc/issue || grep -q -i "manjaro" /etc/issue
     then
+      # Arch
       sudo pacman -S npm --noconfirm
     elif grep -q -i "ubuntu" /etc/issue || grep -q -i "debain" /etc/issue
     then
+      # Debian
       sudo apt-get -y install npm  
     elif grep -q -i "fedora" /etc/issue
     then
-      sudo dnf install npm
+      # Fedora
+      sudo dnf -y install npm
     else
       echo "IDK. Get a different distro"
       exit 1
@@ -81,7 +85,7 @@ default_sections=("START MEETING" "HEAD TO SHOP" "END MEETING")
 default_descriptions=("President $president and Vice President $vice_president call $club_name $meeting_type to order in $sponsor's room" "$president and $vice_president lead $club_name to metal shop to work on car" "$president and $vice_president adjourn $meeting_type on $meeting_date")
 default_length=${#default_sections[@]}
 
-# Main code start
+# File manipulation part start
 
 # Create file
 touch "$file_name"
@@ -112,11 +116,13 @@ done
 
 # Add purchace section to bottom of pdf
 if $purchace; then
+  # Extra spacing before purchace section
   echo "</br></br></br>" >> "$file_name"
   echo "## PURCHACE REQUEST FOR $purchace_item" >> "$file_name"
   echo "</br></br>" >> "$file_name"
   echo "### SIGNATURES: " >> "$file_name"
   echo "</br>" >> "$file_name"
+  # Run through list of officers to add them and a place to sign at end
   for (( i=0; i<$club_officer_length; i++ )); do
     echo "<b>${club_officers[$i]}</b>: " >> "$file_name"
     echo "________________________________________" >> "$file_name"
@@ -124,8 +130,8 @@ if $purchace; then
   done
 fi
 
-# Convert .md file to .pdf
+# Convert then .md file to a .pdf file, since I doubt the district has a md renderer
 md-to-pdf "./$file_name"
 
-# Clean up after finished
+# Clean up after finished by removing md file
 rm -f "$file_name"
