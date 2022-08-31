@@ -49,6 +49,7 @@ case $arg in
       exit 1
     fi
     sudo npm i -g md-to-pdf
+    exit 0
     ;;
   "-o")
     # Set new variables for in case someone's out i guess idk
