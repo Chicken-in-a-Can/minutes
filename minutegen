@@ -11,8 +11,8 @@ meeting_date="$(date +'%m-%d-%Y')"
 file_name="$club_name_var_friendly.$meeting_date.md"
 altering_time="$(date +'%I:%M %p')"
 meeting_type="Build Meeting"
-purchace=false
-purchace_item=""
+purchase=false
+purchase_item=""
 club_officers=("President" "Vice President")
 club_officer_length=${#club_officers[@]}
 # Meeting specific details you may want to change are below the Argument handler
@@ -69,9 +69,9 @@ case $arg in
     meeting_type="$2"
     ;;
   "-b")
-    # Set purchace var to true so that section functions
-    purchace=true
-    purchace_item=$2
+    # Set purchase var to true so that section functions
+    purchase=true
+    purchase_item=$2
     ;;
   *)
     # Handle any other non-existent args
@@ -114,11 +114,11 @@ for (( i=0; i<$default_length; i++ )); do
   echo "</br></br>" >> "$file_name"
 done
 
-# Add purchace section to bottom of pdf
-if $purchace; then
-  # Extra spacing before purchace section
+# Add purchase section to bottom of pdf
+if $purchase; then
+  # Extra spacing before purchase section
   echo "</br></br></br>" >> "$file_name"
-  echo "## PURCHACE REQUEST FOR $purchace_item" >> "$file_name"
+  echo "## PURCHASE REQUEST FOR $purchase_item" >> "$file_name"
   echo "</br></br>" >> "$file_name"
   echo "### SIGNATURES: " >> "$file_name"
   echo "</br>" >> "$file_name"
